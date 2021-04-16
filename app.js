@@ -1,8 +1,10 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var request = require('request')
-var path = require('path')
-var app = express()
+// Load dependencies
+const express = require('express')
+const bodyParser = require('body-parser')
+const request = require('request')
+const path = require('path')
+
+const app = express()
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -10,8 +12,8 @@ app.listen((process.env.PORT || 3000))
 
 // Server frontpage
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'))
-});
+    res.sendFile(path.join(__dirname + '/static/index.html'))
+})
 
 // Facebook Webhook
 app.get('/webhook', function (req, res) {
