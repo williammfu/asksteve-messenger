@@ -20,7 +20,8 @@ const sendRequest = (req, res) => {
 
 // Static functions
 function handleEvent(event) {
-  if(event.message.text.toLowerCase() == 'hi') {
+  console.log(event.message.text)
+  if(event.message.text.toLowerCase() === 'hi') {
     sendMessage(event.sender.id, { text: event.message.text + " there!" })
   } else {
     sendMessage(event.sender.id, { text: "Other msg 2020-12-01" })
