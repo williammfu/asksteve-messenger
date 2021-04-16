@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 2rem 0 2rem 2rem;
+      font-family: 'Roboto', serif;
+    }
+
+    .card {
+      margin: 0.2rem;
+      transition: 0.3s;
+      border-radius: 0.5rem;
+      width: 40%;
+    }
+
+    /* On mouse-over, add a deeper shadow */
+    .card:hover {
+      box-shadow: 0 4px 6px 0 lightgray;
+    }
+
+    /* Add some padding inside the card container */
+    .container {
+      padding: 2px 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Say Hi to Cloves!</h1>
+  <p>A Simple chatbot messenger built with messenger</p>
+  <div class="card container">
+    <h3>1. Say Hi!</h3>
+    <p>To start, say hi to Clove!</p>
+  </div>
+  <div class="card container">
+    <h3>2. Tell us your name</h3>
+    <p>Introduce your self</p>
+  </div>
+  <div class="card container">
+    <h3>3. When is your birthday?</h3>
+    <p>Tell us the special date! (e.g. 2020-02-02)</p>
+  </div>
+  <div class="card container">
+    <h3>4. Count the days!</h3>
+    <p>Choose to count the days to your birthday</p>
+  </div>
+  <div class="card container">
+    <h3>5. Endpoints</h3>
+    <p><b>GET /messages</b> to discover all the messages sent!</p>
+    <p><b>GET /messages/:id</b> to discover the message with id</p>
+    <p><b>DELETE /messages/:id</b> to delete the message with id</p>
+  </div>
+
+  <!-- Messenger Chat Plugin Code -->
+  <div id="fb-root"></div>
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        xfbml: true,
+        version: 'v10.0'
+      });
+    };
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+  <!-- Your Chat Plugin code -->
+  <div class="fb-customerchat" attribution="page_inbox" page_id="103030271928030">
+  </div>
+</body>
+
+
+
+</html>
