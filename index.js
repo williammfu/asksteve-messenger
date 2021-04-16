@@ -10,14 +10,13 @@ app.listen((process.env.PORT || 3000))
 
 // Server frontpage
 app.get('/', function (req, res) {
-    res.send('This is TestBot Server')
+    res.sendFile(path.join(__dirname + '/index.html'))
 });
 
 // Facebook Webhook
 app.get('/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === 'testbot_verify_token') {
-        // res.send(req.query['hub.challenge'])
-        res.sendFile(path.join(__dirname + '/index.html'))
+        res.send(req.query['hub.challenge'])
     } else {
         res.send('Invalid verify token')
     }
