@@ -6,19 +6,19 @@ const fetchAllMessages = (req, res) => {
 }
 
 const fetchMessage = (req, res) => {
-  if(req.params.id >= 0 && req.params.id < localData.data.length)
-    res.status(200).send(localData.data[req.params.id])
+  let msg = localData.find(req.params.id)
+  if(msg)
+    res.status(200).send(msg)
   else
-    res.status(400).send({ message: "Message ID not found" })
+    res.status(400).send({ message: `Message ID ${req.params.id} not found` })
 }
 
 const deleteMessage = (req, res) => {
-  if(req.params.id >= 0 && req.params.id < localData.data.length) {
-    localData.pop(req.params.id)
+  if(localData.pop(req.params.id)) {
     res.status(200).send({ message: `Message ID ${req.params.id} deleted` })
   }
   else
-    res.status(400).send({ message: "Message ID not found" })
+    res.status(400).send({ message: `Message ID ${req.params.id} not found` })
 }
 
 module.exports = {

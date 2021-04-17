@@ -6,18 +6,20 @@
 var state = 0
 var senderName = ''
 var senderDate = null
+
+// Constants
 const errorMsg = {
   text: 'I\'m sorry, I can\'t seem to identify your message :('
 }
 const quickReplies = [
   {
     "content_type": "text",
-    "title": "\u2705 Yes",
+    "title": "Yes",
     "payload": "Yes"
   },
   {
     "content_type": "text",
-    "title": "\u274C No",
+    "title": "No",
     "payload": "No"
   }
 ]
@@ -26,16 +28,16 @@ const yess = ['yea', 'yeah', 'yes', 'yah', 'yep', 'yup', 'of course', 'okay']
 const nos = ['no', 'nah', 'nope', 'nae', 'naw', 'nay', 'no, thanks']
 const findDate = /\d{4}([\/./-])\d{2}\1\d{2}/
 
-const changeState = function() {
+const changeState = function () {
   state++
   state %= 4
 }
 
-const giveReply = function(msg) {
-  switch(state) {
+const giveReply = function (msg) {
+  switch (state) {
     case 0:
       return askName(msg)
-    case 1: 
+    case 1:
       return askBirthData(msg)
     case 2:
       return askCountDays(msg)
@@ -45,12 +47,12 @@ const giveReply = function(msg) {
 }
 
 function createMessage(text, quickReply = null) {
-  if(quickReply)
+  if (quickReply)
     return {
       text: text,
       quick_replies: quickReply
     }
-  
+
   return {
     text: text
   }
@@ -59,8 +61,8 @@ function createMessage(text, quickReply = null) {
 function askName(msg) {
   var temp = msg
   temp = temp.replace(/[\.!,]*$/, '')
-  
-  if(greetings.includes(temp)) {
+
+  if (greetings.includes(temp)) {
     changeState()
     return createMessage(`Hi, there! Could you tell us your name?`)
   }
@@ -76,13 +78,13 @@ function askBirthData(msg) {
 function askCountDays(msg) {
   try {
     let matchString = findDate.exec(msg)
-    if(!matchString)
+    if (!matchString)
       return createMessage('I can\'t find your birthdate')
-    
+
     let date = new Date(matchString[0])
     if (date == 'Invalid Date')
       return createMessage('Invalid Date :(')
-    
+
     changeState()
     senderDate = date
     return createMessage(
@@ -90,19 +92,21 @@ function askCountDays(msg) {
       quickReplies
     )
 
-  } catch(e) {
+  } catch (e) {
     return errorMsg
   }
 }
 
 function giveAnswerOrGoodbye(msg) {
   console.log(msg)
-  if(yess.includes(msg)) {
+  msg = msg.replace(/[\.!,]*$/, '')
+
+  if (yess.includes(msg.toLowerCase())) {
     let now = new Date()
     let nearestBday = new Date(
-      now.getFullYear() + 
+      now.getFullYear() +
       (now.getMonth() > senderDate.getMonth() || (
-        now.getMonth() == senderDate.getMonth() && now.getDate() > senderDate.getDate() 
+        now.getMonth() == senderDate.getMonth() && now.getDate() > senderDate.getDate()
       )),
       senderDate.getMonth(), senderDate.getDate()
     )
@@ -110,9 +114,11 @@ function giveAnswerOrGoodbye(msg) {
     let diff = Math.ceil((nearestBday.getTime() - now.getTime()) / (1000 * 3600 * 24))
     changeState()
     return createMessage(`There are ${diff} days left until your next birthday`)
-  } else if(nos.includes(msg)) {
+
+  } else if (nos.includes(msg.toLowerCase())) {
     changeState()
-    return createMessage('Goodbye \u1F44B')
+    return createMessage('Goodbye')
+
   }
   return errorMsg
 }

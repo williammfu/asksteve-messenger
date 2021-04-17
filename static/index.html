@@ -3,28 +3,47 @@
 
 <head>
   <meta charset="utf-8" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Roboto', serif;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
 </head>
 
-<body style="margin-left: 2rem;">
+<body>
   <h1>Say Hi to Cloves!</h1>
   <p>A Simple chatbot messenger built with messenger</p>
+  <div class="card container">
+    <h3>1. Say Hi!</h3>
+    <p>To start, say hi to Clove!</p>
+  </div>
+  <div class="card container">
+    <h3>2. Tell us your name</h3>
+    <p>Introduce your self</p>
+  </div>
+  <div class="card container">
+    <h3>3. When is your birthday?</h3>
+    <p>Tell us the special date! (e.g. 2020-02-02)</p>
+  </div>
+  <div class="card container">
+    <h3>4. Count the days!</h3>
+    <p>Choose to count the days to your birthday</p>
+  </div>
+  <div class="card container">
+    <h3>5. Endpoints</h3>
+    <p><b>GET /messages</b> to discover all the messages sent!</p>
+    <p><b>GET /messages/:id</b> to discover the message with id</p>
+    <p><b>DELETE /messages/:id</b> to delete the message with id</p>
+  </div>
+
   <!-- Messenger Chat Plugin Code -->
   <div id="fb-root"></div>
   <script>
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
       FB.init({
-        xfbml            : true,
-        version          : 'v10.0'
+        xfbml: true,
+        version: 'v10.0'
       });
     };
 
-    (function(d, s, id) {
+    (function (d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
@@ -34,9 +53,7 @@
   </script>
 
   <!-- Your Chat Plugin code -->
-  <div class="fb-customerchat"
-    attribution="page_inbox"
-    page_id="103030271928030">
+  <div class="fb-customerchat" attribution="page_inbox" page_id="103030271928030">
   </div>
 </body>
 
