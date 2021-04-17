@@ -1,5 +1,6 @@
 const request = require('request')
 var localData = require('../data')
+var messenger = require('../utils/messenger')
 
 const simpleFetch = (req, res) => {
   if (req.query['hub.verify_token'] === 'verify_token') {
@@ -15,21 +16,11 @@ const sendRequest = (req, res) => {
   for (i = 0; i < events.length; i++) {
     var event = events[i]
     if (event.message && event.message.text) {
-      handleEvent(event)
+      localData.push(event.sender.id, event.message.text)
+      sendMessage(event.sender.id, { text: messenger.giveReply(event.message.text) })
     }
   }
   res.sendStatus(200)
-}
-
-// Static functions
-function handleEvent(event) {
-  console.log(event.message.text)
-  localData.push(event.sender.id, event.message.text)
-  if(event.message.text.toLowerCase() === 'hi') {
-    sendMessage(event.sender.id, { text: event.message.text + " there!" })
-  } else {
-    sendMessage(event.sender.id, { text: "Other msg 2020-12-01" })
-  }
 }
 
 function sendMessage(recipientId, message) {
