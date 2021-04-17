@@ -17,7 +17,7 @@ const sendRequest = (req, res) => {
     var event = events[i]
     if (event.message && event.message.text) {
       localData.push(event.sender.id, event.message.text)
-      sendMessage(event.sender.id, { text: messenger.giveReply(event.message.text) })
+      sendMessage(event.sender.id, messenger.giveReply(event.message.text))
     }
   }
   res.sendStatus(200)
