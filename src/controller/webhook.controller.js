@@ -1,5 +1,5 @@
 const request = require('request')
-var history = []
+var localData = require('../data')
 
 const simpleFetch = (req, res) => {
   if (req.query['hub.verify_token'] === 'verify_token') {
@@ -24,7 +24,7 @@ const sendRequest = (req, res) => {
 // Static functions
 function handleEvent(event) {
   console.log(event.message.text)
-  history.push(event.message.text)
+  localData.push(event.sender.id, event.message.text)
   if(event.message.text.toLowerCase() === 'hi') {
     sendMessage(event.sender.id, { text: event.message.text + " there!" })
   } else {
