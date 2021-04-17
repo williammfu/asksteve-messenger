@@ -12,13 +12,13 @@ const errorMsg = {
 const quickReplies = [
   {
     "content_type": "text",
-    "title": "yes",
-    "payload": "yes"
+    "title": "\u2705 Yes",
+    "payload": "Yes"
   },
   {
     "content_type": "text",
-    "title": "no",
-    "payload": "no"
+    "title": "\u274C No",
+    "payload": "No"
   }
 ]
 const greetings = ['hi', 'hello', 'hai', 'hallo', 'halo', 'greetings', 'helo']
@@ -112,7 +112,7 @@ function giveAnswerOrGoodbye(msg) {
     return createMessage(`There are ${diff} days left until your next birthday`)
   } else if(nos.includes(msg)) {
     changeState()
-    return createMessage('Goodbye')
+    return createMessage('Goodbye \u1F44B')
   }
   return errorMsg
 }
