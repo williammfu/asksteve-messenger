@@ -1,7 +1,7 @@
 const request = require('request')
+var history = []
 
 const simpleFetch = (req, res) => {
-  console.log(req.query)
   if (req.query['hub.verify_token'] === 'verify_token') {
     res.send(req.query['hub.challenge'])
   } else {
@@ -24,6 +24,7 @@ const sendRequest = (req, res) => {
 // Static functions
 function handleEvent(event) {
   console.log(event.message.text)
+  history.push(event.message.text)
   if(event.message.text.toLowerCase() === 'hi') {
     sendMessage(event.sender.id, { text: event.message.text + " there!" })
   } else {
