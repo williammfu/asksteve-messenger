@@ -6,7 +6,7 @@ const path = require('path')
 
 // Load Routers
 const webhook = require('./src/routes/webhook.routes')
-const messages = require('./src/routes/messages.routes')
+const messages = require('./src/routes/message.routes')
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))

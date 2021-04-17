@@ -1,9 +1,9 @@
 // Runtime storage
-const id = 0
+var id = 0
 module.exports.data = []
 module.exports.push = function(id_sender, msg) {
   this.data.push({
-    id_msg = id,
+    id_msg: id,
     id_sender: id_sender,
     message: msg
   })
