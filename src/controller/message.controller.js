@@ -29,10 +29,5 @@ const deleteMessage = async (req, res) => {
 module.exports = {
   fetchAllMessages,
   fetchMessage,
-<<<<<<< HEAD
   deleteMessage,
 };
-=======
-  deleteMessage
-}
->>>>>>> 12899b94ccc243c1b4dab8c3095b8eac57220026

@@ -8,14 +8,14 @@ const conn = mongoose.createConnection(
     {useUnifiedTopology: true, useNewUrlParser: true},
 );
 
-autoIncrement.initialize(connection);
+autoIncrement.initialize(conn);
 
 const MessageSchema = new Schema({
   senderId: String,
   message: String,
 });
 
-MessageSchema.plugin(autoIncrement, 'Message');
+MessageSchema.plugin(autoIncrement.plugin, 'Message');
 const Message = conn.model('Message', MessageSchema);
 
 module.exports = {
