@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const autoIncrement = require('mongoose-auto-increment');
 
 const conn = mongoose.createConnection(
-    'mongodb://admin:rO08Urb35B4MorKT@SG-cloves-43305.servers.mongodirector.com:27017/messages',
-    {useUnifiedTopology: true, useNewUrlParser: true},
+    'mongodb://admin:rO08Urb35B4MorKT@SG-cloves-43305.servers.mongodirector.com:27017',
+    {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true},
 );
 
 autoIncrement.initialize(conn);
