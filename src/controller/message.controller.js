@@ -1,28 +1,33 @@
 // message controller
-var localData = require('../data')
+const {Message} = require('../mongo');
 
-const fetchAllMessages = (req, res) => {
-  res.status(200).send(localData.data)
-}
+const fetchAllMessages = async (req, res) => {
+  const msg = await Message.find({}).exec();
+  res.status(200).send(msg);
+};
 
-const fetchMessage = (req, res) => {
-  let msg = localData.find(req.params.id)
-  if(msg)
-    res.status(200).send(msg)
-  else
-    res.status(400).send({ message: `Message ID ${req.params.id} not found` })
-}
-
-const deleteMessage = (req, res) => {
-  if(localData.pop(req.params.id)) {
-    res.status(200).send({ message: `Message ID ${req.params.id} deleted` })
+const fetchMessage = async (req, res) => {
+  const msg = await Message.findById(req.params.id).exec();
+  if (msg) {
+    res.status(200).send(msg);
+  } else {
+    res.status(400).send({message: `Message ID ${req.params.id} not found`});
   }
-  else
-    res.status(400).send({ message: `Message ID ${req.params.id} not found` })
-}
+};
+
+const deleteMessage = async (req, res) => {
+  try {
+    const item = await Message.findOneAndRemove({id: req.params.id}).exec();
+    if (!item) {
+      res.status(400).send({message: `ID ${req.params.id} not found`});
+    }
+  } catch (e) {
+    res.send({message: 'Message not deleted'});
+  }
+};
 
 module.exports = {
   fetchAllMessages,
   fetchMessage,
-  deleteMessage
-}
+  deleteMessage,
+};
