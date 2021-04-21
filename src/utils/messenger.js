@@ -34,6 +34,7 @@ const changeState = function() {
 };
 
 const giveReply = function(msg) {
+  if (isGreetings(msg)) state = 0;
   switch (state) {
     case 0:
       return askName(msg);
@@ -66,15 +67,24 @@ function createMessage(text, quickReply = null) {
 }
 
 /**
+ * Checks whether a message is considered a greeting
+ * @param {*} msg message received
+ * @return {boolean} true, if it's a greeting text
+ */
+function isGreetings(msg) {
+  let temp = msg;
+  temp = temp.replace(/[\.!,]*$/, '');
+
+  return greetings.includes(temp);
+}
+
+/**
  * Asks user for name
  * @param {*} msg message received
  * @return {object} Message object for user
  */
 function askName(msg) {
-  let temp = msg;
-  temp = temp.replace(/[\.!,]*$/, '');
-
-  if (greetings.includes(temp)) {
+  if (isGreetings(msg)) {
     changeState();
     return createMessage(`Hi, there! Could you tell us your name?`);
   } else return errorMsg;
