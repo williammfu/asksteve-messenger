@@ -1,5 +1,5 @@
 const request = require('request');
-const {Message} = require('../mongo');
+const {Message} = require('../models/message');
 const messenger = require('../utils/messenger');
 
 const simpleFetch = (req, res) => {
@@ -15,7 +15,6 @@ const sendRequest = async (req, res) => {
   for (i = 0; i < events.length; i++) {
     const event = events[i];
     if (event.message && event.message.text) {
-      console.log(event.message.text)
       await Message.create({
         senderId: event.sender.id,
         message: event.message.text,

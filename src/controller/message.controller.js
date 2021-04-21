@@ -1,5 +1,5 @@
 // message controller
-const {Message} = require('../mongo');
+const {Message} = require('../models/message');
 
 const fetchAllMessages = async (req, res) => {
   const msg = await Message.find({}).exec();
@@ -16,14 +16,13 @@ const fetchMessage = async (req, res) => {
 };
 
 const deleteMessage = async (req, res) => {
-  try {
-    const item = await Message.findOneAndRemove({id: req.params.id}).exec();
-    if (!item) {
-      res.status(400).send({message: `ID ${req.params.id} not found`});
-    }
-  } catch (e) {
+  Message.deleteOne({'_id': req.params.id}).then(function() {
+    res.status(200).send({
+      message: `Message with ID ${req.params.id} deleted`,
+    });
+  }).catch(function(err) {
     res.send({message: 'Message not deleted'});
-  }
+  });
 };
 
 module.exports = {
