@@ -13,7 +13,6 @@ npm start
 ```
 **Note**: To develop the program locally, you need the configure a messenger webhook yourself (instructions [here](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup))
 
-
 #### Updates 
 - **(21/4/2021)** 
   - To create a secure connection for local development, you could use ngrok with `./ngrok http 3000`
@@ -26,6 +25,14 @@ You can use the command `npm run lint` to utilize the ESLint on the project.
 #### Testings
 You can use the command `npm run test` to utilize the ESLint on the project.
 
+## Environment
+**For local development**
+```
+NODE_ENV=local
+PORT=3000
+DB_URI=mongodb://127.0.0.1:27017
+PAGE_ACCESS_TOKEN=<your messenger access token here>
+```
 ## Deployment
 The following program has already been deployed to
 **http://cloves-messenger.herokuapp.com**
