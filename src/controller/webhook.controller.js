@@ -3,7 +3,7 @@ const {Message} = require('../models/message');
 const messenger = require('../utils/messenger');
 
 const simpleFetch = (req, res) => {
-  if (req.query['hub.verify_token'] === 'verify_token') {
+  if (req.query['hub.verify_token'] === process.env.FB_VERIFY_TOKEN) {
     res.send(req.query['hub.challenge']);
   } else {
     res.send('Invalid verify token');

@@ -11,6 +11,11 @@ Please use the following command on bash/ CMD terminal to run the program locall
 npm i
 npm start
 ```
+
+Development environment
+```
+cp .env.example .env
+```
 **Note**: To develop the program locally, you need the configure a messenger webhook yourself (instructions [here](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup))
 
 #### Updates 

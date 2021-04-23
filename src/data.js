@@ -6,7 +6,10 @@ const autoIncrement = require('mongoose-auto-increment');
 
 const conn = mongoose.createConnection(
     process.env.DB_URI,
-    {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true},
+    {useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false},
 );
 
 autoIncrement.initialize(conn);

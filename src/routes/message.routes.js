@@ -1,8 +1,6 @@
 // Messages
 const express = require('express');
-/*eslint-disable */
-const router = express.Router();
-/*eslint-disable */
+const router = new express.Router();
 const ctrl = require('../controller/message.controller');
 
 router.get('/', ctrl.fetchAllMessages);

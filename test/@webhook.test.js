@@ -17,7 +17,7 @@ describe('Webhook tests', () => {
           .query({
             'hub.mode': 'subscribe',
             'hub.challenge': 'myChallenge',
-            'hub.verify_token': 'verify_token',
+            'hub.verify_token': 'my_verify_token',
           })
           .end((err, res) => {
             res.should.have.status(200);
