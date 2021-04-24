@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "lint": "eslint --fix .",
-    "test": "mocha test/*.js --exit"
+    "test": "mocha test/*.test.js --exit"
   },
   "repository": {
     "type": "git",
@@ -21,12 +21,11 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "chai": "^4.3.4",
-    "chai-http": "^4.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mocha": "^8.3.2",
+    "mongodb-memory-server": "^6.9.6",
     "mongoose": "^5.12.4",
-    "mongoose-auto-increment": "^5.0.1",
     "request": "^2.88.2"
   },
   "devDependencies": {

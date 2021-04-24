@@ -1,12 +1,11 @@
-const {Schema, autoIncrement, conn} = require('../data');
+const mongoose = require('mongoose');
 
-const MessageSchema = new Schema({
+const MessageSchema = new mongoose.Schema({
   senderId: String,
   message: String,
 });
 
-MessageSchema.plugin(autoIncrement.plugin, 'Message');
-const Message = conn.model('Message', MessageSchema);
+const Message = mongoose.model('Message', MessageSchema);
 
 module.exports = {
   Message,

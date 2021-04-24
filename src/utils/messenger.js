@@ -49,8 +49,8 @@ const giveReply = function(msg) {
 
 /**
  * Creates a message instance (Response API)
- * @param {*} text content of message
- * @param {*} quickReply quick reply object (defaults to null)
+ * @param {string} text content of message
+ * @param {object} quickReply quick reply object (defaults to null)
  * @return {object} response API object
  */
 function createMessage(text, quickReply = null) {
@@ -80,7 +80,7 @@ function isGreetings(msg) {
 
 /**
  * Asks user for name
- * @param {*} msg message received
+ * @param {string} msg message received
  * @return {object} Message object for user
  */
 function askName(msg) {
@@ -133,7 +133,7 @@ function askCountDays(msg) {
 
 /**
  * Gives the number of days or say goodbye
- * @param {*} msg
+ * @param {string} msg incoming message string
  * @return {object} message object
  */
 function giveAnswerOrGoodbye(msg) {

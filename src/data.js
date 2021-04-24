@@ -1,21 +1,17 @@
 // Database connection
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const autoIncrement = require('mongoose-auto-increment');
 
-const conn = mongoose.createConnection(
-    process.env.DB_URI,
-    {useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false},
-);
-
-autoIncrement.initialize(conn);
+const conn = async () => {
+  await mongoose.connect(
+      process.env.DB_URI,
+      {useUnifiedTopology: true,
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false},
+  );
+};
 
 module.exports = {
-  Schema,
-  autoIncrement,
   conn,
 };
