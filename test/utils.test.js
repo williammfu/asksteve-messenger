@@ -15,9 +15,7 @@ describe('Bot replies tests', () => {
     it('Ask name after greetings', () => {
       const reply = giveReply('hai!!');
       expect(reply).to.be.a('object');
-      expect(reply.text).to.equal(
-          'Hi, there! Could you tell us your name?',
-      );
+      expect(reply.text).to.equal('Hi, there! Could you tell us your name?');
     });
 
     it('Ask birth date', () => {
@@ -32,9 +30,7 @@ describe('Bot replies tests', () => {
     it('Invalid date reply', () => {
       const reply = giveReply('2020-31-31'); // Date not exist
       expect(reply).to.be.a('object');
-      expect(reply.text).to.equal(
-          'Invalid Date :(',
-      );
+      expect(reply.text).to.equal('Invalid Date :(');
     });
 
     it('Valid date reply', () => {
@@ -55,7 +51,7 @@ describe('Bot replies tests', () => {
       const reply = giveReply('yes');
       expect(reply).to.be.a('object');
       expect(reply.text).to.equal(
-          `There are 1 days left until your next birthday`,
+        `There are 1 days left until your next birthday`
       );
     });
 
@@ -65,9 +61,7 @@ describe('Bot replies tests', () => {
       giveReply('2020-03-07');
       const reply = giveReply('no');
       expect(reply).to.be.a('object');
-      expect(reply.text).to.equal(
-          'Goodbye',
-      );
+      expect(reply.text).to.equal('Goodbye');
     });
   });
 });

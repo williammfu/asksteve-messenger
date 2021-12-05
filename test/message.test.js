@@ -9,18 +9,21 @@ let messageId;
 
 describe('Message tests', () => {
   before(async () => {
-    mongoServer = new MongoMemoryServer();
-    const mongoUri = await mongoServer.getUri();
-    await mongoose.connect(mongoUri,
-        {useNewUrlParser: true, useUnifiedTopology: true});
-    await Message.insertMany([{
-      senderId: 12345,
-      message: 'Lorem Ipsum',
-    },
-    {
-      senderId: 54321,
-      message: 'Ipsum Lorem',
-    },
+    mongoServer = await MongoMemoryServer.create();
+    const mongoUri = mongoServer.getUri();
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    await Message.insertMany([
+      {
+        senderId: 12345,
+        message: 'Lorem Ipsum',
+      },
+      {
+        senderId: 54321,
+        message: 'Ipsum Lorem',
+      },
     ]);
   });
 
