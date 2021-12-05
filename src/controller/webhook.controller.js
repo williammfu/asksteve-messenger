@@ -29,23 +29,26 @@ const sendRequest = async (req, res) => {
  * Sends a response message to user
  * @param {number} recipientId Sender's ID
  * @param {string} message Message to be sent
-*/
+ */
 function sendMessage(recipientId, message) {
-  request({
-    url: 'https://graph.facebook.com/v10.0/me/messages',
-    qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id: recipientId},
-      message: message,
-    },
-  }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending message: ', error);
-    } else if (response.body.error) {
-      console.log('Error: ', response.body.error);
-    }
-  });
+  request(
+      {
+        url: 'https://graph.facebook.com/v10.0/me/messages',
+        qs: {access_token: process.env.FB_ACCESS_TOKEN},
+        method: 'POST',
+        json: {
+          recipient: {id: recipientId},
+          message: message,
+        },
+      },
+      function(error, response, body) {
+        if (error) {
+          console.error('Error sending message: ', error);
+        } else if (response.body.error) {
+          console.error('Error: ', response.body.error);
+        }
+      },
+  );
 }
 
 module.exports = {

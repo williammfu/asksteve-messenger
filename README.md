@@ -12,9 +12,9 @@ Install all the dependencies needed
 npm install
 ```
 
-Please note you need to create your own Facebook app with messenger platform (instructions [here](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup)). To help you with generating a callback URL, you could utilize the ngrok to generate a secure URL to your `localhost:3000` server.
+Please note you need to create your own Facebook app with messenger platform (instructions [here](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup)). To help you with generating a callback URL, you could utilize the ngrok to generate a secure URL to your `localhost:8080` server.
 ```
-ngrok http 3000
+ngrok http 8080
 ```
 
 #### Development environment
@@ -30,13 +30,17 @@ npm start
 ```
 
 #### Updates 
+- **(5/12/2021)**
+  - Updates dependencies
+  - Fixes a few bugs
+- **(24/4/2021)**
+  - Fixed a few bugs on test codes
+  - Refactoring on mongoose connection
 - **(21/4/2021)** 
   - To create a secure connection for local development, you could use ngrok with `./ngrok http 3000`
   - Implemented MongoDB (with Mongoose) and ENV config file
   - Fixed the chat sequence. You could re-chat with a greeting (e.g."hi!") to reset the sequence
-- **(24/4/2021)**
-  - Fixed a few bugs on test codes
-  - Refactoring on mongoose connection
+
 
 #### Linter
 You can use the command `npm run lint` to utilize the ESLint on the project.
