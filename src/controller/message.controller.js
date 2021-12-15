@@ -17,7 +17,7 @@ const fetchAllMessages = async (req, res) => {
 
 const fetchMessage = async (req, res) => {
   try {
-    const id = req.params.id;
+    const {id} = req.params;
     const msg = await Message.findOne({id}, '-_id').exec();
     if (msg) {
       res.status(200).send({ok: true, message: 'Success', data: msg});

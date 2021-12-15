@@ -1,5 +1,6 @@
 const request = require('request');
 const {Message} = require('../models/message');
+const {Recipient} = require('../models/recipient');
 const messenger = require('../utils/messenger');
 
 const FACEBOOK_API_URL = 'https://graph.facebook.com/v10.0/me/messages';
@@ -15,22 +16,38 @@ const simpleFetch = (req, res) => {
 const sendRequest = async (req, res) => {
   try {
     const events = req.body.entry[0].messaging;
-    for (i = 0; i < events.length; i++) {
-      const event = events[i];
+    for (const event of events) {
       if (event.message && event.message.text) {
+        let sender = await Recipient.findOne({senderId: event.sender.id});
+        if (!sender) {
+          await Recipient.create({
+            senderId: event.sender.id,
+            state: 0,
+            birthDate: null,
+          });
+          sender = await Recipient.findOne({senderId: event.sender.id});
+        }
         await Message.create({
           senderId: event.sender.id,
           message: event.message.text,
         });
-        sendMessage(
+        const {success, replyMsg} = await messenger.giveReply(
             event.sender.id,
-            messenger.giveReply(event.message.text),
+            sender.state,
+            event.message.text,
         );
+        await Recipient.updateOne(
+            {
+              senderId: event.sender.id,
+            },
+            {$set: {state: (sender.state + success) % 4}},
+        );
+        sendMessage(event.sender.id, replyMsg);
       }
     }
     res.sendStatus(200);
   } catch (e) {
-    console.error(e);
+    console.error(e.message);
   }
 };
 
@@ -39,7 +56,7 @@ const sendRequest = async (req, res) => {
  * @param {number} recipientId Sender's ID
  * @param {string} message Message to be sent
  */
-function sendMessage(recipientId, message) {
+const sendMessage = (recipientId, message) => {
   request(
       {
         url: FACEBOOK_API_URL,
@@ -58,7 +75,7 @@ function sendMessage(recipientId, message) {
         }
       },
   );
-}
+};
 
 module.exports = {
   simpleFetch,
