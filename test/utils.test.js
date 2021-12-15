@@ -1,67 +1,121 @@
 // Webhook test
 const {expect} = require('chai');
+const mongoose = require('mongoose');
+const {MongoMemoryServer} = require('mongodb-memory-server');
+const {Recipient} = require('../src/models/recipient');
 const {giveReply} = require('../src/utils/messenger');
+const TEST_RECIPIENT_ID = 'unique_123456';
 
 describe('Bot replies tests', () => {
   describe('Check Sent Message', () => {
-    it('Not Greeting reply', () => {
-      const reply = giveReply('woy');
-      expect(reply).to.be.a('object');
-      expect(reply.text).to.equal(
+    before(async () => {
+      mongoServer = await MongoMemoryServer.create();
+      const mongoUri = mongoServer.getUri();
+      await mongoose.connect(mongoUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      await Recipient.create({
+        senderId: TEST_RECIPIENT_ID,
+        state: 0,
+        birthDate: null,
+      });
+    });
+
+    after(async () => {
+      await Recipient.deleteOne({senderId: TEST_RECIPIENT_ID});
+    });
+
+    it('Not Greeting reply', async () => {
+      const {success, replyMsg} = await giveReply(
+          TEST_RECIPIENT_ID,
+          0,
+          'woy',
+      );
+      expect(replyMsg).to.be.a('object');
+      expect(success).to.be.false;
+      expect(replyMsg.text).to.equal(
           'I\'m sorry, I can\'t seem to identify your message :(',
       );
     });
 
-    it('Ask name after greetings', () => {
-      const reply = giveReply('hai!!');
-      expect(reply).to.be.a('object');
-      expect(reply.text).to.equal('Hi, there! Could you tell us your name?');
+    it('Ask name after greetings', async () => {
+      const {success, replyMsg} = await giveReply(
+          TEST_RECIPIENT_ID,
+          0,
+          'hai!!',
+      );
+      expect(replyMsg).to.be.a('object');
+      expect(success).to.be.true;
+      expect(replyMsg.text).to.equal('Hi, there! Could you tell us your name?');
     });
 
-    it('Ask birth date', () => {
+    it('Ask birth date', async () => {
       const senderName = 'Will';
-      const reply = giveReply(senderName);
-      expect(reply).to.be.a('object');
-      expect(reply.text).to.equal(
+      const {success, replyMsg} = await giveReply(
+          TEST_RECIPIENT_ID,
+          1,
+          senderName,
+      );
+      expect(replyMsg).to.be.a('object');
+      expect(success).to.be.true;
+      expect(replyMsg.text).to.equal(
           `Hi ${senderName}! When is your birth date? (YYYY-MM-DD)`,
       );
     });
 
-    it('Invalid date reply', () => {
-      const reply = giveReply('2020-31-31'); // Date not exist
-      expect(reply).to.be.a('object');
-      expect(reply.text).to.equal('Invalid Date :(');
+    it('Invalid date reply', async () => {
+      const {success, replyMsg} = await giveReply(
+          TEST_RECIPIENT_ID,
+          2,
+          '2020-31-31',
+      ); // Date not exist
+      expect(replyMsg).to.be.a('object');
+      expect(success).to.be.false;
+      expect(replyMsg.text).to.equal('Invalid Date :(');
     });
 
-    it('Valid date reply', () => {
-      const reply = giveReply('2020-03-07');
-      expect(reply).to.be.a('object');
-      expect(reply.text).to.equal(
+    it('Valid date reply', async () => {
+      const {success, replyMsg} = await giveReply(
+          TEST_RECIPIENT_ID,
+          2,
+          '2020-03-07',
+      );
+      expect(replyMsg).to.be.a('object');
+      expect(success).to.be.true;
+      expect(replyMsg.text).to.equal(
           'Would you like to know how many days to your birthday?',
       );
-      expect(reply.quick_replies).to.be.an('array');
+      expect(replyMsg.quick_replies).to.be.an('array');
     });
 
-    it('Answer birthday', () => {
-      giveReply('hai!!');
-      giveReply('fu');
+    it('Answer birthday', async () => {
       birthDate = new Date();
       birthDate.setDate(birthDate.getDate() + 1);
-      giveReply(birthDate.toISOString().split('T')[0]);
-      const reply = giveReply('yes');
-      expect(reply).to.be.a('object');
-      expect(reply.text).to.equal(
+      const temp = await giveReply(
+          TEST_RECIPIENT_ID,
+          2,
+          birthDate.toISOString().split('T')[0],
+      );
+      expect(temp.success).to.be.true;
+      expect(temp.replyMsg).to.be.a('object');
+      const {success, replyMsg} = await giveReply(
+          TEST_RECIPIENT_ID,
+          3,
+          'yes',
+      );
+      expect(success).to.be.true;
+      expect(replyMsg).to.be.a('object');
+      expect(replyMsg.text).to.equal(
           `There are 1 days left until your next birthday`,
       );
     });
 
-    it('Goodbye', () => {
-      giveReply('hai!!');
-      giveReply('fu');
-      giveReply('2020-03-07');
-      const reply = giveReply('no');
-      expect(reply).to.be.a('object');
-      expect(reply.text).to.equal('Goodbye');
+    it('Goodbye', async () => {
+      const {success, replyMsg} = await giveReply(TEST_RECIPIENT_ID, 3, 'no');
+      expect(success).to.be.true;
+      expect(replyMsg).to.be.a('object');
+      expect(replyMsg.text).to.equal('Goodbye');
     });
   });
 });
