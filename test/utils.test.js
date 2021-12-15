@@ -51,7 +51,7 @@ describe('Bot replies tests', () => {
       const reply = giveReply('yes');
       expect(reply).to.be.a('object');
       expect(reply.text).to.equal(
-        `There are 1 days left until your next birthday`
+          `There are 1 days left until your next birthday`,
       );
     });
 

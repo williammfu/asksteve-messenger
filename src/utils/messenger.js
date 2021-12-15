@@ -3,6 +3,7 @@
 // 1 - Reply after receiving name
 // 2 - Reply after receiving birth_date
 // 3 - Reply after receiving yes/no
+
 let state = 0;
 let senderName = '';
 let senderDate = null;
@@ -13,14 +14,14 @@ const errorMsg = {
 };
 const quickReplies = [
   {
-    'content_type': 'text',
-    'title': 'Yes',
-    'payload': 'Yes',
+    content_type: 'text',
+    title: 'Yes',
+    payload: 'Yes',
   },
   {
-    'content_type': 'text',
-    'title': 'No',
-    'payload': 'No',
+    content_type: 'text',
+    title: 'No',
+    payload: 'No',
   },
 ];
 const greetings = ['hi', 'hello', 'hai', 'hallo', 'halo', 'greetings', 'helo'];
@@ -141,16 +142,19 @@ function giveAnswerOrGoodbye(msg) {
 
   if (yess.includes(msg.toLowerCase())) {
     const now = new Date();
+    // To ensure the hour format 00:00:00
+    const today = new Date(now.toISOString().split('T')[0]);
     const nearestBday = new Date(
-        now.getFullYear() +
-      (now.getMonth() > senderDate.getMonth() || (
-        now.getMonth() == senderDate.getMonth() &&
-        now.getDate() > senderDate.getDate()
-      )),
-        senderDate.getMonth(), senderDate.getDate(),
+        today.getFullYear() +
+        (today.getMonth() > senderDate.getMonth() ||
+          (today.getMonth() == senderDate.getMonth() &&
+            today.getDate() > senderDate.getDate())),
+        senderDate.getMonth(),
+        senderDate.getDate(),
     );
     const diff = Math.ceil(
-        (nearestBday.getTime() - now.getTime()) / (1000 * 3600 * 24));
+        (nearestBday.getTime() - today.getTime()) / (1000 * 3600 * 24),
+    );
     changeState();
     return createMessage(
         `There are ${diff} days left until your next birthday`,
