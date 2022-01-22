@@ -92,11 +92,6 @@ describe("Bot replies tests", () => {
     it("Answer birthday", async () => {
       birthDate = new Date();
       birthDate.setDate(birthDate.getDate() + 1);
-      console.log(
-        `${birthDate.getFullYear()}-${
-          birthDate.getMonth() + 1
-        }-${birthDate.getDate()}`
-      );
       const temp = await giveReply(
         TEST_RECIPIENT_ID,
         2,
