@@ -3,26 +3,26 @@
 // 1 - Reply after receiving name
 // 2 - Reply after receiving birth_date
 // 3 - Reply after receiving yes/no
-const {Recipient} = require('../models/recipient');
+const { Recipient } = require("../models/recipient");
 // let senderDate = null;
 
 // Constants
-const errorMsg = 'I\'m sorry, I can\'t seem to identify your message :(';
+const errorMsg = "I'm sorry, I can't seem to identify your message :(";
 const quickReplies = [
   {
-    content_type: 'text',
-    title: 'Yes',
-    payload: 'Yes',
+    content_type: "text",
+    title: "Yes",
+    payload: "Yes",
   },
   {
-    content_type: 'text',
-    title: 'No',
-    payload: 'No',
+    content_type: "text",
+    title: "No",
+    payload: "No",
   },
 ];
-const greetings = ['hi', 'hello', 'hai', 'hallo', 'halo', 'greetings', 'helo'];
-const yess = ['yea', 'yeah', 'yes', 'yah', 'yep', 'yup', 'of course', 'okay'];
-const nos = ['no', 'nah', 'nope', 'nae', 'naw', 'nay', 'no, thanks'];
+const greetings = ["hi", "hello", "hai", "hallo", "halo", "greetings", "helo"];
+const yess = ["yea", "yeah", "yes", "yah", "yep", "yup", "of course", "okay"];
+const nos = ["no", "nah", "nope", "nae", "naw", "nay", "no, thanks"];
 const findDate = /\d{4}([\/./-])\d{2}\1\d{2}/;
 
 /**
@@ -33,9 +33,6 @@ const findDate = /\d{4}([\/./-])\d{2}\1\d{2}/;
  * @return {object} response API object
  */
 async function giveReply(recipientId, state, msg) {
-  if (isGreetings(msg)) {
-    return askName(msg);
-  }
   switch (state) {
     case 0:
       return askName(msg);
@@ -80,7 +77,7 @@ function createErrorMessage() {
  */
 function isGreetings(msg) {
   let temp = msg;
-  temp = temp.replace(/[\.!,]*$/, '');
+  temp = temp.replace(/[\.!,]*$/, "");
 
   return greetings.includes(temp);
 }
@@ -105,8 +102,8 @@ function askName(msg) {
  */
 function askBirthData(msg) {
   return createMessage(
-      true,
-      `Hi ${msg.toString()}! When is your birth date? (YYYY-MM-DD)`,
+    true,
+    `Hi ${msg.toString()}! When is your birth date? (YYYY-MM-DD)`
   );
 }
 
@@ -120,19 +117,19 @@ async function askCountDays(recipientId, msg) {
   try {
     const matchString = findDate.exec(msg);
     if (!matchString) {
-      return createMessage(false, 'I can\'t find your birthdate');
+      return createMessage(false, "I can't find your birthdate");
     }
 
     const date = new Date(matchString[0]);
-    if (date == 'Invalid Date') {
-      return createMessage(false, 'Invalid Date :(');
+    if (date == "Invalid Date") {
+      return createMessage(false, "Invalid Date :(");
     }
 
-    await Recipient.updateOne({senderId: recipientId}, {birthDate: date});
+    await Recipient.updateOne({ senderId: recipientId }, { birthDate: date });
     return createMessage(
-        true,
-        'Would you like to know how many days to your birthday?',
-        quickReplies,
+      true,
+      "Would you like to know how many days to your birthday?",
+      quickReplies
     );
   } catch (e) {
     return createErrorMessage();
@@ -146,31 +143,43 @@ async function askCountDays(recipientId, msg) {
  * @return {object} message object
  */
 async function giveAnswerOrGoodbye(recipientId, msg) {
-  msg = msg.replace(/[\.!,]*$/, '');
+  const tempMsg = msg.replace(/[\.!,]*$/, "");
 
-  if (yess.includes(msg.toLowerCase())) {
+  if (yess.includes(tempMsg.toLowerCase())) {
     const now = new Date();
-    const rec = await Recipient.findOne({senderId: recipientId});
+    const rec = await Recipient.findOne({ senderId: recipientId });
     const senderDate = rec.birthDate;
     // To ensure the hour format 00:00:00
-    const today = new Date(now.toISOString().split('T')[0]);
-    const nearestBday = new Date(
+    const today = new Date(
+      `${now.getFullYear()}-${(now.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${now.getDate()}`
+    );
+
+    if (
+      today.getDate() === senderDate.getDate() &&
+      today.getMonth() === senderDate.getMonth()
+    ) {
+      return createMessage(true, "Today is your birthday");
+    } else {
+      const nearestBday = new Date(
         today.getFullYear() +
-        (today.getMonth() > senderDate.getMonth() ||
-          (today.getMonth() == senderDate.getMonth() &&
-            today.getDate() > senderDate.getDate())),
+          (today.getMonth() > senderDate.getMonth() ||
+            (today.getMonth() == senderDate.getMonth() &&
+              today.getDate() > senderDate.getDate())),
         senderDate.getMonth(),
-        senderDate.getDate(),
-    );
-    const diff = Math.ceil(
-        (nearestBday.getTime() - today.getTime()) / (1000 * 3600 * 24),
-    );
-    return createMessage(
+        senderDate.getDate()
+      );
+      const diff = Math.ceil(
+        (nearestBday.getTime() - today.getTime()) / (1000 * 3600 * 24)
+      );
+      return createMessage(
         true,
-        `There are ${diff} days left until your next birthday`,
-    );
-  } else if (nos.includes(msg.toLowerCase())) {
-    return createMessage(true, 'Goodbye');
+        `There are ${diff} days left until your next birthday`
+      );
+    }
+  } else if (nos.includes(tempMsg.toLowerCase())) {
+    return createMessage(true, "Goodbye");
   }
   return createErrorMessage();
 }
